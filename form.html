@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Form Builder</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #4CAF50, #2196F3);
+            color: #333;
+        }
+        header {
+            background: #3F51B5;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 1.8em;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .form-header img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .form-header input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            font-size: 1.2em;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        .form-section input, .form-section textarea {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .add-question-btn, .preview-btn {
+            display: block;
+            text-align: center;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .add-question-btn {
+            background: #FF5722;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .add-question-btn:hover {
+            background: #E64A19;
+        }
+        .preview-btn {
+            background: #4CAF50;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .preview-btn:hover {
+            background: #388E3C;
+        }
+        #questionsContainer {
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Advanced Form Builder
+    </header>
+    <div class="container">
+        <div class="form-header">
+            <!-- Static Header Image -->
+            <img src="header.png" alt="Header Image" id="formHeaderImage">
+            
+            <!-- Title Input -->
+            <input type="text" id="formTitle" placeholder="Enter Form Title">
+            
+            <!-- Upload Header Image -->
+            <input type="file" id="headerImage" accept="image/*" onchange="updateHeaderImage(event)">
+        </div>
+        <div id="questionsContainer"></div>
+        <a class="add-question-btn" onclick="addQuestion()">+ Add Question</a>
+        <a class="preview-btn" onclick="previewForm()">Preview Form</a>
+    </div>
+    <script>
+        function addQuestion() {
+            const container = document.getElementById('questionsContainer');
+            const question = document.createElement('div');
+            question.className = 'form-section';
+            question.innerHTML = `
+                <input type="text" placeholder="Enter your question">
+                <textarea placeholder="Enter options here (if applicable)"></textarea>
+            `;
+            container.appendChild(question);
+        }
+
+        function previewForm() {
+            const formTitle = document.getElementById('formTitle').value;
+            const questions = document.querySelectorAll('.form-section input, .form-section textarea');
+
+            let previewHTML = `<h2>${formTitle}</h2>`;
+            questions.forEach(q => {
+                previewHTML += `<p>${q.value}</p>`;
+            });
+
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(previewHTML);
+            previewWindow.document.close();
+        }
+
+        function updateHeaderImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('formHeaderImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>
